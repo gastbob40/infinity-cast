@@ -29,6 +29,11 @@ class User implements UserInterface
      */
     private $roles = [];
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $azureId;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -98,5 +103,17 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getAzureId(): ?string
+    {
+        return $this->azureId;
+    }
+
+    public function setAzureId(string $azureId): self
+    {
+        $this->azureId = $azureId;
+
+        return $this;
     }
 }

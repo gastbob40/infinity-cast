@@ -4,7 +4,9 @@ namespace App\Repository;
 
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use TheNetworg\OAuth2\Client\Provider\AzureResourceOwner;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,32 +21,27 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
-    // /**
-    //  * @return User[] Returns an array of User objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+   public function findOrCreateFromAzureOauth(AzureResourceOwner $owner): User
+   {
+       $user = $this->createQueryBuilder('u')
+           ->where('u.azureId = :azureId')
+           ->setParameters([
+               'azureId' => $owner->getId()
+           ])
+           ->getQuery()
+           ->getOneOrNullResult();
 
-    /*
-    public function findOneBySomeField($value): ?User
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+       if ($user)
+           return $user;
+
+       $user = (new User())
+           ->setAzureId($owner->getId())
+           ->setEmail($owner->getUpn());
+
+       $em = $this->getEntityManager();
+       $em->persist($user);
+       $em->flush();
+
+       return $user;
+   }
 }
