@@ -1,8 +1,42 @@
-{% extends 'base.html.twig' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>News API | Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+</head>
+<body>
 
-{% block title %}Log in!{% endblock %}
+<div class="limiter">
+    <div class="container">
+        <div class="wrap-login">
+            <div class="wrap-login__left">
+                <img src="https://upload.wikimedia.org/wikipedia/fr/d/d8/Epita.png"
+                     alt="logo">
+            </div>
+            <div class="wrap-login__right">
+                <span class="wrap-login__right__title">Member Login</span>
 
-{% block body %}
+                {% if error %}
+                    <div class="login__right__error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
+
+                <div class="wrap-login__right__btn">
+                    <a href="{{ url('azure_connect') }}">Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+{#
 <form method="post">
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -24,19 +58,9 @@
            value="{{ csrf_token('authenticate') }}"
     >
 
-    {#
-        Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-        See https://symfony.com/doc/current/security/remember_me.html
-
-        <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" name="_remember_me"> Remember me
-            </label>
-        </div>
-    #}
 
     <button class="btn btn-lg btn-primary" type="submit">
         Sign in
     </button>
 </form>
-{% endblock %}
+#}
