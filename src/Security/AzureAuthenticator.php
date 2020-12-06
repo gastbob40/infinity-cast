@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use TheNetworg\OAuth2\Client\Provider\AzureResourceOwner;
@@ -63,12 +64,20 @@ class AzureAuthenticator extends SocialAuthenticator
     {
         /** @var AzureResourceOwner $azureUser */
         $azureUser = $this->clientRegistry->getClient('azure')->fetchUserFromToken($credentials);
+        $domain = explode('@', $azureUser->getUpn())[1];
+
+        if ($domain != 'epita.fr') {
+            throw new CustomUserMessageAuthenticationException($domain . ' is not a valid email domain name');
+        }
+
         return $this->userRepository->findOrCreateFromAzureOauth($azureUser);
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
-
+        $message = strtr($exception->getMessageKey(), $exception->getMessageData());
+        dd($message);
+        return new RedirectResponse('/');
     }
 
     /**
