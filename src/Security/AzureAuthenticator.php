@@ -10,6 +10,7 @@ use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
 use League\OAuth2\Client\Token\AccessToken;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -32,12 +33,17 @@ class AzureAuthenticator extends SocialAuthenticator
      * @var UserRepository
      */
     private $userRepository;
+    /**
+     * @var SessionInterface
+     */
+    private $session;
 
-    public function __construct(RouterInterface $router, ClientRegistry $clientRegistry, UserRepository $userRepository)
+    public function __construct(RouterInterface $router, ClientRegistry $clientRegistry, UserRepository $userRepository, SessionInterface $session)
     {
         $this->router = $router;
         $this->clientRegistry = $clientRegistry;
         $this->userRepository = $userRepository;
+        $this->session = $session;
     }
 
     public function start(Request $request, AuthenticationException $authException = null)
@@ -67,7 +73,7 @@ class AzureAuthenticator extends SocialAuthenticator
         $domain = explode('@', $azureUser->getUpn())[1];
 
         if ($domain != 'epita.fr') {
-            throw new CustomUserMessageAuthenticationException($domain . ' is not a valid email domain name');
+            throw new CustomUserMessageAuthenticationException('<strong>' . $domain . '</strong> is not a valid email domain.');
         }
 
         return $this->userRepository->findOrCreateFromAzureOauth($azureUser);
@@ -76,7 +82,7 @@ class AzureAuthenticator extends SocialAuthenticator
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
         $message = strtr($exception->getMessageKey(), $exception->getMessageData());
-        dd($message);
+        $this->session->getFlashBag()->add('danger', $message);
         return new RedirectResponse('/');
     }
 
