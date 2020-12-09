@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -33,6 +35,16 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $azureId;
+
+    /**
+     * @ORM\OneToMany(targetEntity=AssociationMember::class, mappedBy="user")
+     */
+    private $associationMembers;
+
+    public function __construct()
+    {
+        $this->associationMembers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -115,5 +127,43 @@ class User implements UserInterface
         $this->azureId = $azureId;
 
         return $this;
+    }
+
+    /**
+     * @return Collection|AssociationMember[]
+     */
+    public function getAssociationMembers(): Collection
+    {
+        return $this->associationMembers;
+    }
+
+    public function addAssociationMember(AssociationMember $associationMember): self
+    {
+        if (!$this->associationMembers->contains($associationMember)) {
+            $this->associationMembers[] = $associationMember;
+            $associationMember->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAssociationMember(AssociationMember $associationMember): self
+    {
+        if ($this->associationMembers->removeElement($associationMember)) {
+            // set the owning side to null (unless already changed)
+            if ($associationMember->getUser() === $this) {
+                $associationMember->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function __toString(): string
+    {
+        return $this->getEmail();
     }
 }

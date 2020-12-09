@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\AssociationRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -36,6 +38,16 @@ class Association
      * @ORM\Column(type="text")
      */
     private $description;
+
+    /**
+     * @ORM\OneToMany(targetEntity=AssociationMember::class, mappedBy="association")
+     */
+    private $associationMembers;
+
+    public function __construct()
+    {
+        $this->associationMembers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -88,5 +100,43 @@ class Association
         $this->description = $description;
 
         return $this;
+    }
+
+    /**
+     * @return Collection|AssociationMember[]
+     */
+    public function getAssociationMembers(): Collection
+    {
+        return $this->associationMembers;
+    }
+
+    public function addAssociationMember(AssociationMember $associationMember): self
+    {
+        if (!$this->associationMembers->contains($associationMember)) {
+            $this->associationMembers[] = $associationMember;
+            $associationMember->setAssociation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAssociationMember(AssociationMember $associationMember): self
+    {
+        if ($this->associationMembers->removeElement($associationMember)) {
+            // set the owning side to null (unless already changed)
+            if ($associationMember->getAssociation() === $this) {
+                $associationMember->setAssociation(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->getName();
     }
 }

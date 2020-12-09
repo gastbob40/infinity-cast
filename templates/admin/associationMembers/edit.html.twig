@@ -1,0 +1,31 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}Webhook{% endblock %}
+
+{% block body %}
+    <div class="card bg-light mb-3">
+        <div class="card-header">Edit webhook</div>
+        <div class="card-body">
+            {{ form_start(form) }}
+
+            <div class="row">
+                <div class="col-sm">
+                    {{ form_row(form.association) }}
+                </div>
+                <div class="col-sm">
+                    {{ form_row(form.user) }}
+                </div>
+            </div>
+
+            {{ form_rest(form) }}
+
+            <div class="text-right">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    Edit
+                </button>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

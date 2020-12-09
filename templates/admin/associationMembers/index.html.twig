@@ -1,0 +1,47 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}Webhooks{% endblock %}
+
+{% block body %}
+    <div class="card bg-light mb-3">
+        <div class="card-header d-flex justify-content-between">
+            Association Members
+
+            <a class="btn btn-primary" href="{{ url('admin_association_members_new') }}">
+                New
+            </a>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">User</th>
+                    <th scope="col">Association</th>
+                    <th scope="col" class="text-right">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for associationMember in associationMembers %}
+                    <tr>
+                        <th scope="row">{{ associationMember.id }}</th>
+                        <td>{{ associationMember.user.email }}</td>
+                        <td>{{ associationMember.association.name }}</td>
+                        <td class="text-right">
+                            <a class="btn btn-outline-secondary"
+                               href="{{ url('admin_association_members_edit', {id: associationMember.id}) }}">
+                                <img src="{{ asset('svg/pencil.svg') }}" alt="">
+                            </a>
+
+                            <a class="btn btn-outline-danger"
+                               href="{{ url('admin_association_members_delete', {id: associationMember.id}) }}">
+                                <img src="{{ asset('svg/trash.svg') }}" alt="">
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
