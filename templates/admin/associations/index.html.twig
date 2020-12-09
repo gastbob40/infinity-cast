@@ -1,0 +1,52 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}Webhooks{% endblock %}
+
+{% block body %}
+    <div class="card bg-light mb-3">
+        <div class="card-header d-flex justify-content-between">
+            Associations
+
+            <a class="btn btn-primary" href="{{ url('admin_associations_new') }}">
+                New
+            </a>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Logo</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Contact</th>
+                    <th scope="col" class="text-right">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for association in associations %}
+                    <tr>
+                        <th scope="row">{{ association.id }}</th>
+                        <th>
+                            <img src="{{ association.logo }}" alt="" style="width: 32px; height: 32px">
+                        </th>
+                        <td>{{ association.name }}</td>
+                        <td>{{ association.email }}</td>
+                        <td class="text-right">
+
+                            <a class="btn btn-outline-secondary"
+                               href="{{ url('admin_associations_edit', {id: association.id}) }}">
+                                <img src="{{ asset('svg/pencil.svg') }}" alt="">
+                            </a>
+
+                            <a class="btn btn-outline-danger"
+                               href="{{ url('admin_associations_delete', {id: association.id}) }}">
+                                <img src="{{ asset('svg/trash.svg') }}" alt="">
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

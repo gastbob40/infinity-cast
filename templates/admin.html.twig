@@ -38,6 +38,18 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url('admin_webhooks_home') }}">
+                        Webhooks
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url('admin_associations_home') }}">
+                        Associations
+                    </a>
+                </li>
+
                 {#{% if request.user.is_superuser or request.user|has_group:"Staff" %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'moderation:servers' %}">Servers</a>
