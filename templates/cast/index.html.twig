@@ -8,6 +8,16 @@
         <div class="card-header">Caster une annonce</div>
 
         <div class="card-body">
+            {{ form_start(form) }}
+            {{ form_rest(form) }}
+
+            <div class="text-right">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    Caster
+                </button>
+            </div>
+
+            {{ form_end(form) }}
         </div>
     </div>
 

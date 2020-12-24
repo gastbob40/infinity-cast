@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CastRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -43,6 +45,16 @@ class Cast
      * @ORM\Column(type="date")
      */
     private $date;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=WebHook::class, inversedBy="casts")
+     */
+    private $webhooks;
+
+    public function __construct()
+    {
+        $this->webhooks = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -105,6 +117,30 @@ class Cast
     public function setDate(\DateTimeInterface $date): self
     {
         $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|WebHook[]
+     */
+    public function getWebhooks(): Collection
+    {
+        return $this->webhooks;
+    }
+
+    public function addWebhook(WebHook $webhook): self
+    {
+        if (!$this->webhooks->contains($webhook)) {
+            $this->webhooks[] = $webhook;
+        }
+
+        return $this;
+    }
+
+    public function removeWebhook(WebHook $webhook): self
+    {
+        $this->webhooks->removeElement($webhook);
 
         return $this;
     }
