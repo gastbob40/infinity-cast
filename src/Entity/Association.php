@@ -44,9 +44,15 @@ class Association
      */
     private $associationMembers;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Cast::class, mappedBy="association")
+     */
+    private $casts;
+
     public function __construct()
     {
         $this->associationMembers = new ArrayCollection();
+        $this->casts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -138,5 +144,35 @@ class Association
     public function __toString(): string
     {
         return $this->getName();
+    }
+
+    /**
+     * @return Collection|Cast[]
+     */
+    public function getCasts(): Collection
+    {
+        return $this->casts;
+    }
+
+    public function addCast(Cast $cast): self
+    {
+        if (!$this->casts->contains($cast)) {
+            $this->casts[] = $cast;
+            $cast->setAssociation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCast(Cast $cast): self
+    {
+        if ($this->casts->removeElement($cast)) {
+            // set the owning side to null (unless already changed)
+            if ($cast->getAssociation() === $this) {
+                $cast->setAssociation(null);
+            }
+        }
+
+        return $this;
     }
 }
