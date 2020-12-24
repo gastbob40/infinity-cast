@@ -9,7 +9,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 /**
  * @Route("/admin/users", name="admin_users_")
@@ -78,5 +80,22 @@ class AdminUsersController extends AbstractController
 
         // Redirect to the user list
         return $this->redirect($this->generateUrl('admin_users_home'));
+    }
+
+    /**
+     * @Route("/{id}/log", name="login_as")
+     * @param SessionInterface $session
+     * @param User $user
+     * @return RedirectResponse
+     */
+    public function loginAs(SessionInterface $session, User $user)
+    {
+        $firewallName = 'main';
+        $firewallContext = $firewallName;
+        $token = new UsernamePasswordToken($user, null, $firewallName, $user->getRoles());
+        $session->set('_security_' . $firewallContext, serialize($token));
+        $session->save();
+
+        return $this->redirect('/');
     }
 }
