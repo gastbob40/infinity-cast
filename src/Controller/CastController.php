@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Form\CastType;
 use App\Repository\AssociationMemberRepository;
 use App\Repository\WebHookRepository;
+use App\Utils\WebhooksSender;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,7 +48,14 @@ class CastController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $webhookSender = (new WebhooksSender())
+                ->setDescription($cast->getDescription())
+                ->setImage($cast->getImage())
+                ->setAuthor($cast->getAssociation()->getName(), $cast->getAssociation()->getLogo());
 
+            foreach ($cast->getWebhooks() as $webhook) {
+                $webhookSender->send($webhook->getUrl());
+            }
         }
 
         // Render the view

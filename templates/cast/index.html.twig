@@ -12,7 +12,7 @@
             {{ form_rest(form) }}
 
             <div class="text-right">
-                <button type="submit" class="btn btn-primary btn-lg">
+                <button type="submit" class="btn btn-primary btn-lg" {% if disabled == true %} disabled {% endif %}>
                     Caster
                 </button>
             </div>
