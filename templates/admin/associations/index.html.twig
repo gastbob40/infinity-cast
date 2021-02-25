@@ -6,6 +6,10 @@
     Associations
 {% endblock %}
 
+{% block actions %}
+    <a href="{{ path('admin_associations_new') }}" class="btn-primary">Create</a>
+{% endblock %}
+
 {% block content %}
     <table class="table">
         <thead>
