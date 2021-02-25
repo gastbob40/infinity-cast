@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Association;
 use App\Form\AssociationType;
 use App\Repository\AssociationRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,19 +17,35 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class AdminAssociationsController extends AbstractController
 {
+    private string $menu = 'associations';
+
     /**
      * @Route("/", name="home")
      * @param AssociationRepository $associationRepository
+     * @param $request
      * @return Response
      */
-    public function index(AssociationRepository $associationRepository)
+    public function index(AssociationRepository $associationRepository, Request $request, PaginatorInterface $paginator)
     {
         // Get associations
-        $associations = $associationRepository->findAll();
+        $query = $associationRepository->findAllQuery();
+
+        if ($request->get('q')) {
+            $query->where('LOWER(row.name) LIKE :search')
+                ->setParameter('search', '%' . $request->get('q') . '%');
+        }
+
+        $associations = $paginator->paginate(
+            $query->getQuery(),
+            $request->query->getInt('page', 1),
+            20
+        );
 
         // Render the view
         return $this->render('admin/associations/index.html.twig', [
-            'associations' => $associations
+            'associations' => $associations,
+            'searchable' => true,
+            'menu' => $this->menu
         ]);
     }
 
