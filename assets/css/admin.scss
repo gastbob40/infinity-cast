@@ -1,0 +1,98 @@
+// Variables
+// ==================
+
+:root {
+  --color-dark: #f0f3ff;
+  --color: #d4dcff;
+  --color-light: #8491c7;
+  --color-inversed: #d4dcff;
+  --color-inversed60: #d4dcff99;
+  --contrast: #5396e7;
+  --gap: 20px;
+  --space: 8px;
+  --border: #2a2e5e;
+  --border-light: #161e3b;
+  --background: #171933;
+  --background-light: #1b1e3d;
+  --card-bg: #22244d;
+  --card-bg-footer: #1d1f42;
+  --shadow: rgba(0, 0, 0, 0.2);
+  --play: #1d1d3a;
+  --list-hover: #282a5a;
+  --card-footer: #{darken(#202248, 3)};
+  --skeleton: #0f1224;
+  --skeleton-wave: #171933;
+  --red: #A6333F;
+  --selection-background: #3D59A1;
+  --header-background: #1b1e3dF2;
+  --header-background-inversed: #263880F2;
+}
+
+@import 'tools/reset';
+@import 'tools/functions';
+@import 'tools/mixins';
+@import 'tools/layout';
+@import 'tools/typography';
+@import 'tools/animations';
+
+// Generic
+// ==================
+body {
+  font-family: $font;
+  font-size: 16px;
+  color: var(--color);
+  line-height: 1.6;
+  background: var(--background);
+  scroll-margin: 100px 0 0 0;
+  word-break: break-word;
+}
+
+body.light {
+  background: var(--background-light);
+
+  &::after {
+    display: none;
+  }
+}
+
+body.header-light::after {
+  display: none;
+}
+
+::selection {
+  background: var(--contrast);
+  color: #fff;
+}
+
+.split-background {
+  background: linear-gradient(to top, var(--background-light), var(--background-light)) left top/100% var(--split) no-repeat var(--background);
+}
+
+
+@import 'admin/dashboard';
+@import 'admin/spotlight';
+
+
+// Modules
+// ==================
+@import 'admin/card';
+@import 'admin/color';
+@import 'admin/scrollbar';
+@import 'admin/btn';
+@import 'admin/pagination';
+@import 'admin/form';
+@import 'admin/alert';
+@import 'admin/formatted';
+@import 'admin/table';
+@import 'admin/tabs';
+@import 'admin/list';
+@import 'admin/pill';
+@import 'admin/modal';
+@import 'admin/hero';
+@import 'admin/nav';
+@import 'admin/highlight';
+@import 'admin/stepper';
+@import 'admin/slider';
+@import 'admin/search';
+@import 'admin/filter';
+@import 'admin/dropdown';

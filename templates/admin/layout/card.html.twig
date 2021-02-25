@@ -1,0 +1,24 @@
+{% extends 'admin/admin.html.twig' %}
+
+{% block body %}
+
+    <div class="stack" style="--gap:1">
+
+        <div class="flex mb1">
+            <div class="dashboard-title">
+                {% block cardTitle '' %}
+            </div>
+            <div class="hstack" style="--gap:1;">
+                {% block actions '' %}
+            </div>
+        </div>
+
+        {% include 'admin/partials/flash.html.twig' %}
+
+        <div class="dashboard-card stack-large">
+            {% block content '' %}
+        </div>
+
+    </div>
+
+{% endblock %}
