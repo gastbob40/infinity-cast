@@ -1,0 +1,21 @@
+{{ form_start(form, {attr: {class: 'stacked'}}) }}
+
+<div class="grid">
+
+
+    {{ form_row(form.name) }}
+
+    {{ form_row(form.email) }}
+
+    {{ form_row(form.logo) }}
+
+    <div class="full">
+        {{ form_row(form.description) }}
+    </div>
+
+    <div class="full">
+        <button type="submit" class="btn-gradient">{{ label }}</button>
+    </div>
+</div>
+
+{{ form_end(form) }}

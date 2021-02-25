@@ -99,7 +99,7 @@ class AdminAssociationsController extends AbstractController
             $entityManager->flush();
 
             // Send a confirmation
-            $this->addFlash('success', 'Association <strong>' . $association->getName() . '</strong> has been edited.');
+            $this->addFlash('success', 'Association ' . $association->getName() . ' has been edited.');
 
             // Redirect to the association list
             return $this->redirect($this->generateUrl('admin_associations_home'));
@@ -123,7 +123,7 @@ class AdminAssociationsController extends AbstractController
         $entityManager->remove($association);
         $entityManager->flush();
 
-        $this->addFlash('danger', 'Association <strong>' . $association->getName() . '</strong> has been deleted.');
+        $this->addFlash('danger', 'Association ' . $association->getName() . ' has been deleted.');
 
         // Redirect to the association list
         return $this->redirect($this->generateUrl('admin_associations_home'));

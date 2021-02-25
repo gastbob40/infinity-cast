@@ -1,31 +1,16 @@
-{% extends 'admin.html.twig' %}
+{% extends 'admin/layout/card.html.twig' %}
 
-{% block title %}Webhook{% endblock %}
+{% block title %}Edit{% endblock %}
+{% block cardTitle %}
+    {{ icon('pen') }}
+    Create a association
+{% endblock %}
 
-{% block body %}
-    <div class="card bg-light mb-3">
-        <div class="card-header">Create association</div>
-        <div class="card-body">
-            {{ form_start(form) }}
+{% block content %}
+    <section class="stack-large">
 
-            <div class="row">
-                <div class="col-sm">
-                    {{ form_row(form.name) }}
-                </div>
-                <div class="col-sm">
-                    {{ form_row(form.email) }}
-                </div>
-            </div>
-
-            {{ form_rest(form) }}
-
-            <div class="text-right">
-                <button type="submit" class="btn btn-primary btn-lg">
-                    Create
-                </button>
-            </div>
-
-            {{ form_end(form) }}
-        </div>
-    </div>
+        <section>
+            {{ include('admin/associations/_form.html.twig', {label: 'Create'}) }}
+        </section>
+    </section>
 {% endblock %}
