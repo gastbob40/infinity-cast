@@ -8,6 +8,7 @@ use App\Form\CastType;
 use App\Repository\AssociationMemberRepository;
 use App\Repository\WebHookRepository;
 use App\Utils\WebhooksSender;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,6 +23,7 @@ class CastController extends AbstractController
      * @param WebHookRepository $webHookRepository
      * @return Response
      * @throws \Exception
+     * @IsGranted("ROLE_USER")
      */
     public function index(Request $request, AssociationMemberRepository $associationMemberRepository,
                           WebHookRepository $webHookRepository)
