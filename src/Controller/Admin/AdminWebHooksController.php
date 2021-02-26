@@ -5,6 +5,8 @@ namespace App\Controller\Admin;
 use App\Entity\WebHook;
 use App\Form\WebHookType;
 use App\Repository\WebHookRepository;
+use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,23 +15,39 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/admin/webhooks", name="admin_webhooks_")
+ * @IsGranted("ROLE_ADMIN")
  */
 class AdminWebHooksController extends AbstractController
 {
+    private string $menu = 'webhooks';
 
     /**
      * @Route("/", name="home")
      * @param WebHookRepository $webHookRepository
      * @return Response
      */
-    public function index(WebHookRepository $webHookRepository): Response
+    public function index(WebHookRepository $webHookRepository, Request $request, PaginatorInterface $paginator): Response
     {
         // Get webhooks
-        $webhooks = $webHookRepository->findAll();
+        $query = $webHookRepository->findAllQuery();
+
+        if ($request->get('q')) {
+            $query->where('LOWER(row.name) LIKE :search')
+                ->orWhere('LOWER(row.url) LIKE :search')
+                ->setParameter('search', '%' . $request->get('q') . '%');
+        }
+
+        $webhooks = $paginator->paginate(
+            $query->getQuery(),
+            $request->query->getInt('page', 1),
+            20
+        );
 
         // Render the view
         return $this->render('admin/webhooks/index.html.twig', [
             'webhooks' => $webhooks,
+            'searchable' => true,
+            'menu' => $this->menu
         ]);
     }
 

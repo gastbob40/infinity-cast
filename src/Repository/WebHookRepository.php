@@ -19,6 +19,11 @@ class WebHookRepository extends ServiceEntityRepository
         parent::__construct($registry, WebHook::class);
     }
 
+    public function findAllQuery()
+    {
+        return $this->createQueryBuilder('row');
+    }
+
     // /**
     //  * @return WebHook[] Returns an array of WebHook objects
     //  */

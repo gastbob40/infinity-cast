@@ -1,44 +1,53 @@
-{% extends 'admin.html.twig' %}
+{% extends 'admin/layout/card.html.twig' %}
 
 {% block title %}Webhooks{% endblock %}
+{% block cardTitle %}
+    {{ icon('lines') }}
+    Webhooks
+{% endblock %}
 
-{% block body %}
-    <div class="card bg-light mb-3">
-        <div class="card-header d-flex justify-content-between">
-            Webhooks
+{% block actions %}
+    <a href="{{ path('admin_webhooks_new') }}" class="btn-primary">Create</a>
+{% endblock %}
 
-            <a class="btn btn-primary" href="{{ url('admin_webhooks_new') }}">
-                New
-            </a>
-        </div>
-        <div class="card-body">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col" class="text-right">Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for webhook in webhooks %}
-                    <tr>
-                        <th scope="row">{{ webhook.id }}</th>
-                        <td>{{ webhook.name }}</td>
-                        <td class="text-right">
-                            <a class="btn btn-outline-secondary" href="{{ url('admin_webhooks_edit', {id: webhook.id}) }}">
-                                <img src="{{ asset('svg/pencil.svg') }}" alt="">
-                            </a>
+{% block content %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>URL</th>
+            <th class="text-right">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for webhook in webhooks %}
+            <tr>
+                <td class="dashboard-id">
+                    {{ webhook.id }}
+                </td>
+                <td class="dashboard-id">
+                    {{ webhook.name }}
+                </td>
+                <td>
+                    {{ webhook.url|slice(0,52) }}...
+                </td>
+                <td>
+                    <div class="dashboard-actions">
+                        <a href="{{ path('admin_webhooks_edit', {id: webhook.id}) }}">{{ icon('edit') }}</a>
 
-                            <a class="btn btn-outline-danger"
-                               href="{{ url('admin_webhooks_delete', {id: webhook.id}) }}">
-                                <img src="{{ asset('svg/trash.svg') }}" alt="">
-                            </a>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
+                        <form action="{{ path('admin_webhooks_delete', {id: webhook.id}) }}" method="post"
+                              onsubmit="return confirm('Do you really want to remove this webhooks?')">
+                            <button type="submit">
+                                {{ icon('delete') }}
+                            </button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {{ knp_pagination_render(webhooks) }}
 {% endblock %}
