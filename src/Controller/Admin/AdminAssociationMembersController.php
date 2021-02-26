@@ -74,14 +74,15 @@ class AdminAssociationMembersController extends AbstractController
             $em->flush();
 
             // Send a confirmation
-            $this->addFlash('success', '<strong>' . $associationMember->getUser()->getEmail() . '</strong> has been linked to <strong>' . $associationMember->getAssociation()->getName() . '</strong>.');
+            $this->addFlash('success', $associationMember->getUser()->getEmail() . ' has been linked to ' . $associationMember->getAssociation()->getName() . '.');
 
             // Redirect to the list
             return $this->redirect($this->generateUrl('admin_association_members_home'));
         }
 
-        return $this->render('admin/associationMembers/new.html.twig', [
-            'form' => $form->createView()
+        return $this->render('admin/association-members/new.html.twig', [
+            'form' => $form->createView(),
+            'menu' => $this->menu
         ]);
     }
 
@@ -104,15 +105,16 @@ class AdminAssociationMembersController extends AbstractController
             $entityManager->flush();
 
             // Send a confirmation
-            $this->addFlash('success', '<strong>' . $associationMember->getUser()->getEmail() . '</strong>\'s link has been edited.');
+            $this->addFlash('success', $associationMember->getUser()->getEmail() . '\'s link has been edited.');
 
             // Redirect to the association list
             return $this->redirect($this->generateUrl('admin_association_members_home'));
         }
 
         // Render the view
-        return $this->render('admin/associationMembers/edit.html.twig', [
+        return $this->render('admin/association-members/edit.html.twig', [
             'form' => $form->createView(),
+            'menu' => $this->menu
         ]);
     }
 
@@ -128,7 +130,7 @@ class AdminAssociationMembersController extends AbstractController
         $entityManager->remove($associationMember);
         $entityManager->flush();
 
-        $this->addFlash('danger', '<strong>' . $associationMember->getUser()->getEmail() . '</strong>\'s link has been deleted.');
+        $this->addFlash('success', $associationMember->getUser()->getEmail() . '\'s link has been deleted.');
 
         // Redirect to the association members list
         return $this->redirect($this->generateUrl('admin_association_members_home'));
