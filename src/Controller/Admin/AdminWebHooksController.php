@@ -71,7 +71,7 @@ class AdminWebHooksController extends AbstractController
             $em->flush();
 
             // Send a confirmation
-            $this->addFlash('success', 'Webhook <strong>' . $webhook->getName() . '</strong> has been created.');
+            $this->addFlash('success', 'Webhook ' . $webhook->getName() . ' has been created.');
 
             // Redirect to the webhooks list
             return $this->redirect($this->generateUrl('admin_webhooks_home'));
@@ -102,7 +102,7 @@ class AdminWebHooksController extends AbstractController
             $entityManager->flush();
 
             // Send a confirmation
-            $this->addFlash('success', 'Webhook <strong>' . $webhook->getName() . '</strong> has been edited.');
+            $this->addFlash('success', 'Webhook ' . $webhook->getName() . ' has been edited.');
 
             // Redirect to the webhook list
             return $this->redirect($this->generateUrl('admin_webhooks_home'));
@@ -127,7 +127,7 @@ class AdminWebHooksController extends AbstractController
         $entityManager->remove($webHook);
         $entityManager->flush();
 
-        $this->addFlash('danger', 'Webhook <strong>' . $webHook->getName() . '</strong> has been deleted.');
+        $this->addFlash('success', 'Webhook ' . $webHook->getName() . ' has been deleted.');
 
         // Redirect to the webhooks list
         return $this->redirect($this->generateUrl('admin_webhooks_home'));
