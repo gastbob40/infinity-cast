@@ -1,4 +1,4 @@
-{% extends 'admin.html.twig' %}
+{#{% extends 'admin.html.twig' %}
 
 {% block title %}Webhooks{% endblock %}
 
@@ -44,4 +44,59 @@
             </table>
         </div>
     </div>
+{% endblock %}
+#}
+
+{% extends 'admin/layout/card.html.twig' %}
+
+{% block title %}Association Members{% endblock %}
+{% block cardTitle %}
+    {{ icon('user') }}
+    Association Members
+{% endblock %}
+
+{% block actions %}
+    <a href="{{ path('admin_association_members_new') }}" class="btn-primary">Create</a>
+{% endblock %}
+
+{% block content %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Member</th>
+            <th>Association</th>
+            <th class="text-right">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for member in associationMembers %}
+            <tr>
+                <td class="dashboard-id">
+                    {{ member.id }}
+                </td>
+                <td class="dashboard-id">
+                    {{ member.user }}
+                </td>
+                <td>
+                    {{ member.association }}
+                </td>
+                <td>
+                    <div class="dashboard-actions">
+                        <a href="{{ path('admin_association_members_edit', {id: member.id}) }}">{{ icon('edit') }}</a>
+
+                        <form action="{{ path('admin_association_members_delete', {id: member.id}) }}" method="post"
+                              onsubmit="return confirm('Do you really want to remove this link?')">
+                            <button type="submit">
+                                {{ icon('delete') }}
+                            </button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {{ knp_pagination_render(associationMembers) }}
 {% endblock %}

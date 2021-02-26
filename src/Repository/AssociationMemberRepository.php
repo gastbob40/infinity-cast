@@ -19,6 +19,11 @@ class AssociationMemberRepository extends ServiceEntityRepository
         parent::__construct($registry, AssociationMember::class);
     }
 
+    public function findAllQuery()
+    {
+        return $this->createQueryBuilder('row');
+    }
+
     // /**
     //  * @return AssociationMember[] Returns an array of AssociationMember objects
     //  */

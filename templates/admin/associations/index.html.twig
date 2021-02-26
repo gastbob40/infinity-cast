@@ -1,6 +1,6 @@
 {% extends 'admin/layout/card.html.twig' %}
 
-{% block title %}Newsgroups{% endblock %}
+{% block title %}Associations{% endblock %}
 {% block cardTitle %}
     {{ icon('lines') }}
     Associations
@@ -35,7 +35,7 @@
                 <td>
                     <div class="dashboard-actions">
                         <a href="{{ path('admin_associations_edit', {id: asso.id}) }}">{{ icon('edit') }}</a>
-                        
+
                         <form action="{{ path('admin_associations_delete', {id: asso.id}) }}" method="post"
                               onsubmit="return confirm('Do you really want to remove this association?')">
                             <button type="submit">

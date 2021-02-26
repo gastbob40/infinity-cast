@@ -5,6 +5,8 @@ namespace App\Controller\Admin;
 use App\Entity\AssociationMember;
 use App\Form\AssociationMemberType;
 use App\Repository\AssociationMemberRepository;
+use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,22 +15,42 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/admin/association-members", name="admin_association_members_")
+ * @IsGranted("ROLE_ADMIN")
  */
 class AdminAssociationMembersController extends AbstractController
 {
+    private string $menu = 'members';
+
     /**
      * @Route("/", name="home")
      * @param AssociationMemberRepository $associationMemberRepository
      * @return Response
      */
-    public function index(AssociationMemberRepository $associationMemberRepository)
+    public function index(AssociationMemberRepository $associationMemberRepository, Request $request, PaginatorInterface $paginator)
     {
         // Get association members
-        $associationMembers = $associationMemberRepository->findAll();
+        $query = $associationMemberRepository->findAllQuery();
+
+        if ($request->get('q')) {
+            $query
+                ->innerJoin('row.user', 'u')
+                ->innerJoin('row.association', 'a')
+                ->where('LOWER(u.email) LIKE :search')
+                ->orWhere('LOWER(a.name) LIKE :search')
+                ->setParameter('search', '%' . $request->get('q') . '%');
+        }
+
+        $associationMembers = $paginator->paginate(
+            $query->getQuery(),
+            $request->query->getInt('page', 1),
+            20
+        );
 
         // Render the view
-        return $this->render('admin/associationMembers/index.html.twig', [
-            'associationMembers' => $associationMembers
+        return $this->render('admin/association-members/index.html.twig', [
+            'associationMembers' => $associationMembers,
+            'searchable' => true,
+            'menu' => $this->menu
         ]);
     }
 
