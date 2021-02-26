@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,6 +17,7 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 /**
  * @Route("/admin/users", name="admin_users_")
+ * @IsGranted("ROLE_ADMIN")
  */
 class AdminUsersController extends AbstractController
 {
@@ -67,7 +69,7 @@ class AdminUsersController extends AbstractController
             // Save the data
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
-            $this->addFlash('success', 'User <strong>' . $user->getEmail() . '</strong> has been edited.');
+            $this->addFlash('success', 'User ' . $user->getEmail() . ' has been edited.');
 
             // Redirect to the user list
             return $this->redirect($this->generateUrl('admin_users_home'));
@@ -92,7 +94,7 @@ class AdminUsersController extends AbstractController
         $entityManager->remove($user);
         $entityManager->flush();
 
-        $this->addFlash('danger', 'User <strong>' . $user->getEmail() . '</strong> has been deleted.');
+        $this->addFlash('danger', 'User ' . $user->getEmail() . ' has been deleted.');
 
         // Redirect to the user list
         return $this->redirect($this->generateUrl('admin_users_home'));
