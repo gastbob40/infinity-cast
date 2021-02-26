@@ -6,6 +6,7 @@ use App\Entity\Association;
 use App\Form\AssociationType;
 use App\Repository\AssociationRepository;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,6 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/admin/associations", name="admin_associations_")
+ * @IsGranted("ROLE_ADMIN")
  */
 class AdminAssociationsController extends AbstractController
 {
@@ -69,7 +71,7 @@ class AdminAssociationsController extends AbstractController
             $em->flush();
 
             // Send a confirmation
-            $this->addFlash('success', 'Association <strong>' . $association->getName() . '</strong> has been created.');
+            $this->addFlash('success', 'Association ' . $association->getName() . ' has been created.');
 
             // Redirect to the webhooks list
             return $this->redirect($this->generateUrl('admin_associations_home'));
@@ -123,7 +125,7 @@ class AdminAssociationsController extends AbstractController
         $entityManager->remove($association);
         $entityManager->flush();
 
-        $this->addFlash('danger', 'Association ' . $association->getName() . ' has been deleted.');
+        $this->addFlash('success', 'Association ' . $association->getName() . ' has been deleted.');
 
         // Redirect to the association list
         return $this->redirect($this->generateUrl('admin_associations_home'));
