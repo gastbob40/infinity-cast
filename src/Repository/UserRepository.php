@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use TheNetworg\OAuth2\Client\Provider\AzureResourceOwner;
 
@@ -21,27 +20,33 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
-   public function findOrCreateFromAzureOauth(AzureResourceOwner $owner): User
-   {
-       $user = $this->createQueryBuilder('u')
-           ->where('u.azureId = :azureId')
-           ->setParameters([
-               'azureId' => $owner->getId()
-           ])
-           ->getQuery()
-           ->getOneOrNullResult();
+    public function findOrCreateFromAzureOauth(AzureResourceOwner $owner): User
+    {
+        $user = $this->createQueryBuilder('u')
+            ->where('u.azureId = :azureId')
+            ->setParameters([
+                'azureId' => $owner->getId()
+            ])
+            ->getQuery()
+            ->getOneOrNullResult();
 
-       if ($user)
-           return $user;
+        if ($user)
+            return $user;
 
-       $user = (new User())
-           ->setAzureId($owner->getId())
-           ->setEmail($owner->getUpn());
+        $user = (new User())
+            ->setAzureId($owner->getId())
+            ->setEmail($owner->getUpn());
 
-       $em = $this->getEntityManager();
-       $em->persist($user);
-       $em->flush();
+        $em = $this->getEntityManager();
+        $em->persist($user);
+        $em->flush();
 
-       return $user;
-   }
+        return $user;
+    }
+
+
+    public function findAllQuery()
+    {
+        return $this->createQueryBuilder('row');
+    }
 }

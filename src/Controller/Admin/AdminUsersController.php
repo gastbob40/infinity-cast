@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,19 +19,34 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
  */
 class AdminUsersController extends AbstractController
 {
+    private string $menu = 'users';
+
     /**
      * @Route("/", name="home")
      * @param UserRepository $userRepository
      * @return Response
      */
-    public function index(UserRepository $userRepository): Response
+    public function index(UserRepository $userRepository, Request $request, PaginatorInterface $paginator): Response
     {
         // Get users
-        $users = $userRepository->findAll();
+        $query = $userRepository->findAllQuery();
+
+        if ($request->get('q')) {
+            $query->where('LOWER(row.email) LIKE :search')
+                ->setParameter('search', '%' . $request->get('q') . '%');
+        }
+
+        $users = $paginator->paginate(
+            $query->getQuery(),
+            $request->query->getInt('page', 1),
+            20
+        );
 
         // Render the view
         return $this->render('admin/users/index.html.twig', [
             'users' => $users,
+            'searchable' => true,
+            'menu' => $this->menu
         ]);
     }
 
