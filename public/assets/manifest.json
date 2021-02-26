@@ -1,0 +1,19 @@
+{
+  "admin.js": {
+    "file": "admin.3ff43c61.js",
+    "src": "admin.js",
+    "isEntry": true,
+    "css": [
+      "admin.c1d03089.css"
+    ],
+    "assets": [
+      "Inter-Regular.0ef3708d.woff2",
+      "Inter-Medium.0b7d63d4.woff2",
+      "Inter-Bold.2150f4b4.woff2",
+      "input-search.1b47f7f5.svg",
+      "check.7fe1f550.svg",
+      "play.ceb5c559.svg",
+      "hexagon.6e35b854.svg"
+    ]
+  }
+}
