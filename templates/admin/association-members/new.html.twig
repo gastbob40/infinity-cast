@@ -1,4 +1,4 @@
-{% extends 'admin.html.twig' %}
+{#{% extends 'admin.html.twig' %}
 
 {% block title %}Webhook{% endblock %}
 
@@ -28,4 +28,22 @@
             {{ form_end(form) }}
         </div>
     </div>
+{% endblock %}
+#}
+
+{% extends 'admin/layout/card.html.twig' %}
+
+{% block title %}New{% endblock %}
+{% block cardTitle %}
+    {{ icon('pen') }}
+    Create a association member
+{% endblock %}
+
+{% block content %}
+    <section class="stack-large">
+
+        <section>
+            {{ include('admin/association-members/_form.html.twig', {label: 'Create'}) }}
+        </section>
+    </section>
 {% endblock %}
