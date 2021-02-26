@@ -57,10 +57,12 @@
         </div>
         <ul class="dashboard-topbar__nav">
             <li class="dashboard-logout">
-                {{ app.user.email }}
-                <a href="/" style="margin-left: 8px;">
-                    {{ icon('logout') }}
-                </a>
+                {% if app.user %}
+                    {{ app.user.email }}
+                    <a href="/" style="margin-left: 8px;">
+                        {{ icon('logout') }}
+                    </a>
+                {% endif %}
             </li>
         </ul>
     </aside>
